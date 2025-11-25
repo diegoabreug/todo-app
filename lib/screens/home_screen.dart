@@ -10,24 +10,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   final _controller = TextEditingController();
 
-  //creamos una lista para mostrar
   List taskList = [
     ["Dar clases", false],
     ["Comprar cena", false],
     ["Lavar carro", false]
   ];
 
-  //metodo para cambiar el estado del checkbox
   void checkBoxChanged(bool? value, int index) {
     setState(() {
       taskList[index][1] = !taskList[index][1];
     });
   }
 
-  //guardar nueva tarea
   void saveNewTask() {
     setState(() {
       taskList.add([_controller.text, false]);
@@ -36,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _controller.clear();
   }
 
-  //abrir dialogo
   void createNewTask() {
     showDialog(
         context: context,
@@ -68,18 +63,33 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Theme.of(context).primaryColor.withAlpha(120),
         elevation: 0,
       ),
+
       body: ListView.builder(
         itemCount: taskList.length,
         itemBuilder: (context, index) {
-          return TodoTile(
-            taskName: taskList[index][0],
-            taskCompleted: taskList[index][1],
-            onChanged: (value) {
-              checkBoxChanged(value, index);
+          return Dismissible(
+            key: ValueKey(taskList[index][0]),
+            direction: DismissDirection.endToStart,
+            background: Container(
+              color: Colors.red,
+              padding: const EdgeInsets.only(right: 20),
+              alignment: Alignment.centerRight,
+              child: const Icon(Icons.delete, color: Colors.white, size: 30),
+            ),
+            onDismissed: (_) {
+              setState(() {
+                taskList.removeAt(index);
+              });
             },
+            child: TodoTile(
+              taskName: taskList[index][0],
+              taskCompleted: taskList[index][1],
+              onChanged: (value) => checkBoxChanged(value, index),
+            ),
           );
         },
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: createNewTask,
         shape: const CircleBorder(),

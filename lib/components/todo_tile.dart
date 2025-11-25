@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TodoTile extends StatelessWidget {
+  final String taskName;
+  final bool taskCompleted;
+  final void Function(bool?)? onChanged;
+
   const TodoTile({
     super.key,
     required this.taskName,
@@ -8,16 +12,12 @@ class TodoTile extends StatelessWidget {
     this.onChanged,
   });
 
-  final String taskName;
-  final bool taskCompleted;
-  final void Function(bool?)? onChanged;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor.withAlpha(120),
           borderRadius: BorderRadius.circular(12),
